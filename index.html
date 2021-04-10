@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edgse">
+    <meta name="viewport" conteartistidth=device-width, iartistnitial-scale=1.0s.>Music-App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+        integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="main_div">
+
+        <div class="music_container">
+            <h2 id="title">LOTUS LANE</h2>
+            <h3 id="artist">The Loyalist</h3>
+            <div class="img_container">
+                <img src="images/img-1.jpg">
+            </div>
+            <div>
+                <audio src="music/mus-1.mp3"></audio>
+                <div class="progressbar_container" id="progress_container">
+                  <div class="progress_duration_meter">
+
+                    <div id="current_time" >0:00</div>
+                    <div id="duration">2:44</div>
+
+                  </div>
+                 <div class="progress_div" id="progress_div">
+                     <div class="progress" id="progress"></div>
+                 </div>
+
+
+                </div>
+                <div class="music_controls">
+
+                    <i class="fas fa-backward" id="prev" tiltle="Previous"></i>
+                    <i class="fas fa-play main_button" id="play" tiltle="Play"></i>
+                    <i class="fas fa-forward" id="next" tiltle="Next"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        const music = document.querySelector("audio");
+        const img = document.querySelector("img");
+        const play = document.getElementById("play");
+        const artist = document.getElementById("artist");
+        const prev = document.getElementById("prev");
+        const next = document.getElementById("next");
+        const title = document.getElementById("title");
+
+        let progress = document.getElementById("progress");
+         let total_duration = document.getElementById("duration");
+         let current_time = document.getElementById("current_time");
+       
+       
+        const songs = [{
+            name: "mus-1",
+            title: "On My WAy",
+            artist: "loyalist",
+        },
+        {
+            name: "mus-2",
+            title: "On WAy",
+            artist: "loyalist",
+        },
+        {
+            name: "mus-3",
+            title: "My WAy",
+            artist: "loyalist",
+        }]
+
+
+        let isPlaying = false;
+
+        const playMusic = () => {
+            music.play();
+            isPlaying = true;
+            play.classList.replace("fa-play", "fa-pause");
+            img.classList.add("anime");
+        };
+
+        const pauseMusic = () => {
+            music.pause();
+            isPlaying = false;
+            play.classList.replace("fa-pause", "fa-play");
+            img.classList.remove("anime");
+        };
+
+        play.addEventListener('click', () => {
+            isPlaying ? pauseMusic() : playMusic();
+        });
+
+
+        const loadSongs = (songs) => {
+            title.textContent = songs.title;
+            artist.textContent = songs.artist;
+            music.src = "music/" + songs.name + ".mp3";
+            img.src = "images/img-1.jpg";
+        };
+        songIndex = 0;
+
+        const nextSong = () => {
+
+            songIndex = (songIndex + 1) % songs.length;
+
+            loadSongs(songs[songIndex]);
+            playMusic();
+
+        }
+
+        const prevSong = () => {
+
+            songIndex--;
+            if(songIndex==-1)
+            songIndex=songs.length-1;
+            loadSongs(songs[songIndex]);
+            playMusic();
+
+
+        }
+
+      music.addEventListener('timeupdate', (event)=>{
+      const {currentTime , duration}= event.srcElement;
+      let progress_time =(currentTime/ duration)*100;
+      progress.style.width=`${progress_time}%`;
+      
+      let min_duration =Math.floor(duration/60);
+      let sec_duration= Math.floor(duration%60);
+
+      let tot_duration =`${min_duration}:${sec_duration}`;
+     
+     if(duration){ 
+         total_duration.textContent = `${tot_duration}`;}
+
+    
+    let min_currentTime =Math.floor(currentTime/60);
+      let sec_currentTime= Math.floor(currentTime%60);
+      if(sec_currentTime<10)
+      {
+          sec_currentTime=`0${sec_currentTime}`
+      }
+      let tot_currentTime =`${min_currentTime}:${sec_currentTime}`;
+
+     if(currentTime){ 
+         current_time.textContent = `${tot_currentTime}`;}
+
+    }
+    )
+
+        next.addEventListener('click', nextSong);
+        prev.addEventListener('click', prevSong);
+
+    </script>
+</body>
+
+</html>
